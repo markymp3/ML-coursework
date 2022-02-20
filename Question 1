@@ -1,0 +1,75 @@
+import csv
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import Perceptron import matplotlib.pyplot as plt
+%matplotlib inline
+import random
+import scipy.stats as stats
+import seaborn as sns
+from scipy.stats import norm
+
+#q1.a
+df=pd.read_csv('data3.csv')
+df.shape
+df.size
+
+x1=df.X1
+x2=df.X2
+y=df.Y
+
+#q1.b
+np.mean(x1)
+np.mean(x2)
+np.var(x1)
+np.var(x2)
+
+
+df=pd.read_csv('data3.csv')
+print(df.shape)
+df.describe().transpose()
+
+#q1.c
+Da = df[['X1','Y']]
+Db = df[['X2','Y']]
+
+#q1.d(i)
+meanA=np.mean(Da)
+sigmaA=np.std(Da)
+meanB=np.mean(Db)
+sigmaB=np.std(Db)
+
+Da.describe().transpose() #mean=8.36301
+#sigma=3.599429
+
+Db.describe().transpose() #mean=35.204449
+#sigma=19.96155
+a=np.random.normal(meanA, sigmaA, 10)
+b=np.random.normal(meanB, sigmaB, 10)
+
+pdf1=(1 /
+ (sigmaA * np.sqrt(2*np.pi))) * np.exp(-0.5*((1 - meanA) / sigmaA) ** 2)
+pdf2=(1 /
+ (sigmaB * np.sqrt(2*np.pi))) * np.exp(-0.5*((1 - meanB) / sigmaB) ** 2)
+
+DaHist=plt.hist(x1,bins='auto', color='red')
+plt.xlabel("X1 data")
+plt.ylabel("Frequency")
+plt.suptitle("Histogram of X1 Data")
+
+plt.hist(x2,bins=20, color='orange')
+plt.xlabel("X2 Data")
+plt.ylabel("Frequency")
+plt.suptitle("Histogram of X2 da")
+
+sns.distplot(x1,pdf1) ; sns.distplot(x2,pdf2)
+plt.xlabel("Data3")
+plt.ylabel("PDF")
+plt.suptitle("X1:mu=8.36301, sigma=3.599429, X2:mu=35.204449, sigma=19.961550")
+plt.show()
+
+#q1.d(ii)
+from scipy.stats import kstest kstest(np.random.normal(meanA,sigmaA,100),'norm')
+#statsitic >p-value
+#Because the statistic value is greater than the p value of the Da dataset whi ch tells us that there isn't a Gaussian distribution of the Da dataset
+#Since the p-value is less than .05, we would reject the null hypothesis if we had one.
+
